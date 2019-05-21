@@ -1,0 +1,92 @@
+#!/bin/bash
+# Opinionated Software 2019
+
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+BLUE=`tput setaf 4`
+RESET_COLOR=`tput sgr0`
+
+function do_bash {
+  # Use this to run bash commands directly to api container
+  docker-compose exec api bash -c "$1"
+}
+
+function manage {
+    # A shortcut to run python manage.py commands in api container
+    do_bash "python manage.py $1"
+}
+
+function test {
+  # this function accepts a parameter as manage.py test would do
+  echo "Running tests..."
+  manage "test $1"
+}
+
+function delete_migrations {
+  docker-compose exec api find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+  docker-compose exec api find . -path "*/migrations/*.pyc"  -delete
+}
+
+function remigrate {
+    echo "Deleting migrations"
+    delete_migrations
+    echo "Deleting db..."
+    docker-compose rm -sf db
+    echo "${BLUE}Wake up db! wake up!${RESET_COLOR}"
+    docker-compose up -d db
+    echo "${BLUE}Good morning! -db${RESET_COLOR}"
+    migrate
+}
+
+function migrate {
+  echo "Creating migrations..."
+  manage makemigrations
+  while [ $? -ne 0 ]
+  do
+    echo "${BLUE}Retrying! Don't worry this is normal :)${RESET_COLOR}"
+    manage makemigrations
+  done
+  manage migrate
+}
+
+function restart {
+  docker-compose stop
+  docker-compose up -d
+}
+
+function reset_all {
+  restart
+  pip
+  remigrate
+  create_superuser
+  docker-compose logs -f --tail=1000
+}
+
+function create_superuser {
+  echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password', first_name='admin')" | docker-compose exec -T api bash -c "python manage.py shell"
+}
+
+function shell {
+  manage shell
+}
+
+function bash {
+  docker-compose exec api bash
+}
+
+function pip {
+    echo "Installing requirements..."
+    do_bash "pip install -r requirements.txt"
+}
+
+function usage {
+    echo "ERROR: Please check the \"do\" file for options"
+    exit 1
+}
+
+# Set functions as parameter
+if [[ "$#" -eq 0 ]]; then
+    usage
+else
+    $@
+fi
