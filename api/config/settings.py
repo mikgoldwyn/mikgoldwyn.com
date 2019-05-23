@@ -29,7 +29,7 @@ SECRET_KEY = 'virr5!1a+kkw5h)89nxb+$%djm@=1_@*_w@mvbu57dg@7o46so'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.mikgoldwyn.com', 'mikgoldwyn.com']
 
 
 # Application definition
