@@ -13,4 +13,5 @@ urlpatterns = [
 
 # Frontend Serving
 urlpatterns += static('/dist/', document_root=settings.DIST_DIR)
+urlpatterns += static('/static/', document_root=settings.STATIC_ROOT)
 urlpatterns += [re_path('', serve, kwargs={'path': 'index.html', 'document_root': settings.DIST_DIR}, name="index")]
