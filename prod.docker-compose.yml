@@ -27,7 +27,16 @@ services:
     volumes:
       - ./frontend:/app/frontend
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+
     ports:
       - 80:80
+      - 443:443
     stdin_open: true
     tty: true
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
