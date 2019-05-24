@@ -17,26 +17,8 @@ services:
     tty: true
   frontend:
     build: ./frontend
-    command: "bash -c 'npm install && npm run watch'"
+    command: bash -c 'npm install && npm run build'
     volumes:
       - ./frontend:/app/frontend
     stdin_open: true
     tty: true
-  nginx:
-    image: nginx
-    volumes:
-      - ./frontend:/app/frontend
-      - ./nginx/nginx:/etc/nginx/conf.d
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
-
-    ports:
-      - 80:80
-      - 443:443
-    stdin_open: true
-    tty: true
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
