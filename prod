@@ -59,6 +59,7 @@ function reset_all {
   pip
   remigrate
   create_superuser
+  collectstatic
   docker-compose -f prod.docker-compose.yml logs -f --tail=1000
 }
 
@@ -77,6 +78,10 @@ function bash {
 function pip {
     echo "Installing requirements..."
     do_bash "pip install -r requirements.txt"
+}
+
+function collectstatic {
+  manage "collectstatic --noinput"
 }
 
 function usage {
