@@ -17,17 +17,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 DIST_DIR = FRONTEND_DIR + '/dist/'
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'virr5!1a+kkw5h)89nxb+$%djm@=1_@*_w@mvbu57dg@7o46so'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DEBUG', False))
 
 ALLOWED_HOSTS = ['www.mikgoldwyn.com', 'mikgoldwyn.com', 'localhost']
 

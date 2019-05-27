@@ -4,6 +4,8 @@ services:
   db:
     image: postgres
   api:
+    env_file:
+      - ./api/prod.env
     build:
       context: ./api
       dockerfile: prod.Dockerfile

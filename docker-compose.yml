@@ -5,12 +5,12 @@ services:
     image: postgres
   api:
     build: ./api
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py runserver 0.0.0.0:80"
     volumes:
       - ./api:/app/api
       - ./frontend:/app/frontend
     ports:
-      - "8000:8000"
+      - "80:80"
     stdin_open: true
     tty: true
   frontend:
