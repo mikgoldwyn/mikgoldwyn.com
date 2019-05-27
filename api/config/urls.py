@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path, re_path
 
 
@@ -11,4 +12,7 @@ urlpatterns = [
 ]
 
 # Frontend Serving
+if settings.DEBUG:
+    urlpatterns += static('/dist/', document_root=settings.DIST_DIR)
+
 urlpatterns += [re_path('', serve, kwargs={'path': 'index.html', 'document_root': settings.DIST_DIR}, name='index')]
