@@ -94,6 +94,9 @@ function pip_install {
   docker-compose exec api bash -c "pip install $1"
 }
 
+function npm_fix {
+  docker-compose exec frontend bash -c "./node_modules/.bin/eslint src --fix"
+}
 
 
 # Set functions as parameter
