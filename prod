@@ -108,7 +108,7 @@ function reset_all {
   pip
   migrate
   collectstatic
-  systemctl nginx reload
+  systemctl reload nginx
 }
 
 function logs {
@@ -118,7 +118,7 @@ function logs {
 
 function pull_and_deploy {
   git pull
-  systemctl nginx reload
+  systemctl reload nginx
 }
 
 
