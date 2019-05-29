@@ -38,50 +38,13 @@ function remigrate {
     migrate
 }
 
-function migrate {
-  echo "Creating migrations..."
-  manage makemigrations
-  while [ $? -ne 0 ]
-  do
-    echo "${BLUE}Retrying! Don't worry this is normal :)${RESET_COLOR}"
-    manage makemigrations
-  done
-  manage migrate
-}
-
 function restart {
   docker-compose -f prod.docker-compose.yml stop
   docker-compose -f prod.docker-compose.yml up -d
 }
 
-function reset_all {
-  restart
-  pip
-  remigrate
-  create_superuser
-  collectstatic
-  docker-compose -f prod.docker-compose.yml logs -f --tail=1000
-}
-
 function create_superuser {
   echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password', first_name='admin')" | docker-compose -f prod.docker-compose.yml exec -T api bash -c "python manage.py shell"
-}
-
-function shell {
-  manage shell
-}
-
-function bash {
-  docker-compose -f prod.docker-compose.yml exec api bash
-}
-
-function pip {
-    echo "Installing requirements..."
-    do_bash "pip install -r requirements.txt"
-}
-
-function collectstatic {
-  manage "collectstatic --noinput"
 }
 
 function usage {
@@ -95,3 +58,72 @@ if [[ "$#" -eq 0 ]]; then
 else
     $@
 fi
+
+# FUNCTIONS FOR EVERYDAY USE
+
+function collectstatic {
+  # Use this if there are changes in "api" staticfiles
+  manage "collectstatic --noinput"
+}
+
+function api_bash {
+  # Use this if you want to access the bash of "api"
+  docker-compose -f prod.docker-compose.yml exec api bash
+}
+
+function npm_bash {
+  # Use this if you want to access the bash of "frontend"
+  docker-compose -f prod.docker-compose.yml exec frontend bash
+}
+
+function shell {
+  # Use this if you want to access django shell
+  manage shell
+}
+
+function manage {
+  # A shortcut to run python manage.py commands in api container
+  do_bash "python manage.py $1"
+}
+
+function migrate {
+  # Use this if there are changes in the model
+  echo "Creating migrations..."
+  manage makemigrations
+  while [ $? -ne 0 ]
+  do
+    echo "${BLUE}Retrying! Don't worry this is normal :)${RESET_COLOR}"
+    manage makemigrations
+  done
+  manage migrate
+}
+
+function pip {
+  # Use this if there are new python packages
+  echo "Installing requirements..."
+  do_bash "pip install -r requirements.txt"
+}
+
+function npm_install {
+  # Use this if there are new npm packages
+  docker-compose exec frontend npm install
+}
+
+function reset_all {
+  # Use this if you want to do it all (this takes time)
+  restart
+  pip
+  migrate
+  collectstatic
+  nginx reload
+}
+
+function logs {
+  # Use this if you want to follow the logs of all containers
+  docker-compose -f prod.docker-compose.yml logs -f --tail=1000
+}
+
+function pull_and_deploy {
+  git pull
+  nginx reload
+}

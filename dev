@@ -90,3 +90,13 @@ if [[ "$#" -eq 0 ]]; then
 else
     $@
 fi
+
+# FUNCTIONS FOR EVERYDAY USE
+
+function npm_install {
+  docker-compose exec frontend bash -c "npm install $1"
+}
+
+function pip_install {
+  docker-compose exec api bash -c "pip install $1"
+}
