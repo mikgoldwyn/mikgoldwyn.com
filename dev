@@ -84,13 +84,6 @@ function usage {
     exit 1
 }
 
-# Set functions as parameter
-if [[ "$#" -eq 0 ]]; then
-    usage
-else
-    $@
-fi
-
 # FUNCTIONS FOR EVERYDAY USE
 
 function npm_install {
@@ -100,3 +93,12 @@ function npm_install {
 function pip_install {
   docker-compose exec api bash -c "pip install $1"
 }
+
+
+
+# Set functions as parameter
+if [[ "$#" -eq 0 ]]; then
+    usage
+else
+    $@
+fi
