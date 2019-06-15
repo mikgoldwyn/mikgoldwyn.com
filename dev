@@ -85,6 +85,15 @@ function usage {
 }
 
 # FUNCTIONS FOR EVERYDAY USE
+function api_bash {
+  # Use this if you want to access the bash of "api"
+  docker-compose -f prod.docker-compose.yml exec api bash
+}
+
+function npm_bash {
+  # Use this if you want to access the bash of "frontend"
+  docker-compose -f prod.docker-compose.yml exec frontend bash
+}
 
 function npm_install {
   docker-compose exec frontend bash -c "npm install $1"
