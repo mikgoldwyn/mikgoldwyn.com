@@ -15,7 +15,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
-DIST_DIR = FRONTEND_DIR + '/dist/'
+EMPOTECH_DIR = os.path.join(os.path.dirname(BASE_DIR), 'empotech')
+FRONTEND_DIST_DIR = FRONTEND_DIR + '/dist/'
+EMPOTECH_DIST_DIR = EMPOTECH_DIR + '/dist/'
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
@@ -26,8 +28,15 @@ SECRET_KEY = 'virr5!1a+kkw5h)89nxb+$%djm@=1_@*_w@mvbu57dg@7o46so'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG', True))
 
-ALLOWED_HOSTS = ['www.mikgoldwyn.com', 'mikgoldwyn.com', 'localhost']
-
+ALLOWED_HOSTS = [
+    'www.mikgoldwyn.com',
+    'mikgoldwyn.com',
+    'api.mikgoldwyn.com',
+    'empotech.mikgoldwyn.com',
+    'api.localhost',
+    'empotech.localhost',
+    'localhost',
+]
 
 # Application definition
 
@@ -38,9 +47,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third party
+    'django_hosts',
+
+    # Local apps
+    'empotech',
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,9 +64,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'config.default_urls'
 
 TEMPLATES = [
     {
@@ -133,3 +150,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
 }
+
+# Django Hosts
+ROOT_HOSTCONF = 'config.hosts'
+DEFAULT_HOST = 'default'
