@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import axios from 'axios';
 import App from './App.vue';
 
 import router from './router';
-import store from './store/';
+import store from './store';
 import './registerServiceWorker';
 
 import 'material-design-icons-iconfont/dist/material-design-icons.css';

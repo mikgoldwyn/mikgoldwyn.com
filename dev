@@ -105,6 +105,7 @@ function pip_install {
 
 function npm_fix {
   docker-compose exec frontend bash -c "./node_modules/.bin/eslint src --fix"
+  docker-compose exec empotech bash -c "./node_modules/.bin/eslint src --fix"
 }
 
 
