@@ -49,13 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party
+    'corsheaders',
     'django_hosts',
-
     # Local apps
     'empotech',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -154,3 +155,9 @@ REST_FRAMEWORK = {
 # Django Hosts
 ROOT_HOSTCONF = 'config.hosts'
 DEFAULT_HOST = 'default'
+
+# Django Cors
+CORS_ORIGIN_WHITELIST = [
+    'http://empotech.localhost',
+    'https://empotech.mikgoldwyn.com',
+]

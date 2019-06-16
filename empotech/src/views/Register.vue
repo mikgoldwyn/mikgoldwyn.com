@@ -29,23 +29,23 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        valid: false,
-        user: {
-          username: null,
-          password: null,
-          first_name: null,
-          last_name: null,
-          email: null,
-        }
+export default {
+  data () {
+    return {
+      valid: false,
+      user: {
+        username: null,
+        password: null,
+        first_name: null,
+        last_name: null,
+        email: null,
       }
-    },
-    methods: {
-      formSubmit () {
-        this.$refs.form.validate()
-      }
-    },
-  }
+    }
+  },
+  methods: {
+    formSubmit () {
+      this.$refs.form.validate()
+    }
+  },
+}
 </script>

@@ -2,13 +2,11 @@ import axios from 'axios';
 
 
 export default {
-  login({ commit }, { username, password }) {
-    const urlFragments = document.host.split('.');
-    urlFragments[0] = 'api';
-    const url = urlFragments.join('.');
+  login({ commit, state }, { username, password }) {
+    console.log(state)
     commit('loginRequest');
     return axios
-      .post(`${url}/login/`, { username, password })
+      .post(`${state.apiURL()}/empotech/login/`, { username, password })
       .then((response) => {
         commit('loginSuccess', response.data);
         return response;

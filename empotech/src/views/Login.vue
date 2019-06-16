@@ -38,20 +38,24 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        valid: false,
-        user: {
-          username: null,
-          password: null,
-        }
+import { mapState, mapActions } from "vuex";
+
+export default {
+  data () {
+    return {
+      valid: false,
+      user: {
+        username: null,
+        password: null,
       }
-    },
-    methods: {
-      formSubmit () {
-        this.$refs.form.validate()
-      }
-    },
-  }
+    }
+  },
+  methods: {
+    ...mapActions(['login']),
+    formSubmit () {
+      this.$refs.form.validate()
+      this.login({ username: this.user.username, password: this.user.password })
+    }
+  },
+}
 </script>
