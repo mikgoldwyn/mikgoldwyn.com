@@ -27,7 +27,7 @@ services:
     tty: true
   empotech:
     build: ./empotech
-    command: "bash -c 'npm install && npm run watch'"
+    command: bash -c 'npm install && npm run watch'
     volumes:
       - ./empotech:/app/empotech
     stdin_open: true
