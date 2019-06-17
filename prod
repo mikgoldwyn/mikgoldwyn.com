@@ -82,11 +82,11 @@ function manage {
 function migrate {
   # Use this if there are changes in the model
   echo "Creating migrations..."
-  manage makemigrations
+  manage makemigrations --noinput
   while [ $? -ne 0 ]
   do
     echo "${BLUE}Retrying! Don't worry this is normal :)${RESET_COLOR}"
-    manage makemigrations
+    manage makemigrations --noinput
   done
   manage migrate
 }

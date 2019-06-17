@@ -13,6 +13,7 @@ services:
     volumes:
       - ./api:/app/api
       - ./frontend:/app/frontend
+      - ./empotech:/app/empotech
     ports:
       - "8000:8000"
     stdin_open: true
@@ -22,5 +23,12 @@ services:
     command: bash -c 'npm install && npm run watch'
     volumes:
       - ./frontend:/app/frontend
+    stdin_open: true
+    tty: true
+  empotech:
+    build: ./empotech
+    command: "bash -c 'npm install && npm run watch'"
+    volumes:
+      - ./empotech:/app/empotech
     stdin_open: true
     tty: true
