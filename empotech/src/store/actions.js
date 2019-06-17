@@ -15,6 +15,19 @@ export default {
         throw error;
       });
   },
+  logout({ commit, state }) {
+    commit('logoutRequest');
+    return axios
+      .post(`${state.apiURL()}/empotech/logout/`)
+      .then((response) => {
+        commit('logoutSuccess');
+        return response;
+      })
+      .catch((error) => {
+        commit('logoutFailure', error);
+        throw error;
+      });
+  },
   register({ commit, state }, student_data) {
     commit('registerRequest');
     return axios

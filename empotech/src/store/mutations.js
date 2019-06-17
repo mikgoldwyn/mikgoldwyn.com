@@ -13,6 +13,18 @@ export default {
     state.user = {};
   },
 
+  logoutRequest(state) {
+    state.loading = true;
+  },
+  logoutSuccess(state, data) {
+    state.loading = false;
+    state.user = {};
+  },
+  logoutFailure(state) {
+    state.loading = false;
+    state.user = {};
+  },
+
   registerRequest(state) {
     state.loading = true;
   },

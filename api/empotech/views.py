@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +15,7 @@ class LoginView(APIView):
 
         user = authenticate(request, username=username, password=password)
         if user is None:
-            return Response({'success': False, 'error': 'Incorrect crendentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         login(request, user)
         return Response(serializers.UserSerializer(instance=user).data)
@@ -29,3 +29,11 @@ class RegisterView(APIView):
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
         return Response(serializers.UserSerializer(user).data)
+
+
+class LogoutView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        logout(request)
+        return Response()
