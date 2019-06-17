@@ -99,7 +99,8 @@ function pip {
 
 function npm_install {
   # Use this if there are new npm packages
-  docker-compose exec frontend npm install
+  docker-compose -f prod.docker-compose.yml exec frontend npm install
+  docker-compose -f prod.docker-compose.yml exec empotech npm install
 }
 
 function reset_all {
