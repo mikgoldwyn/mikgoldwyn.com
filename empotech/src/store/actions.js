@@ -28,10 +28,10 @@ export default {
         throw error;
       });
   },
-  register({ commit, state }, student_data) {
+  register({ commit, state }, studentData) {
     commit('registerRequest');
     return axios
-      .post(`${state.apiURL()}/empotech/register/`, student_data)
+      .post(`${state.apiURL()}/empotech/register/`, studentData)
       .then((response) => {
         commit('registerSuccess', response.data);
         return response;
@@ -42,9 +42,9 @@ export default {
       });
   },
   showSnackbar({ commit }, message) {
-    commit('showSnackbarSuccess', message)
+    commit('showSnackbarSuccess', message);
   },
   hideSnackbar({ commit }) {
-    commit('hideSnackbarSuccess')
-  }
+    commit('hideSnackbarSuccess');
+  },
 };

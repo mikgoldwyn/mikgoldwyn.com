@@ -5,7 +5,7 @@ import Home from './views/Home.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
 
-import store from './store/'
+import store from './store';
 
 Vue.use(Router);
 
@@ -37,4 +37,4 @@ router.beforeEach((to, from, next) => {
   return next();
 });
 
-export default router
+export default router;
