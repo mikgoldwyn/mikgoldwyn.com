@@ -19,3 +19,13 @@ class LoginView(APIView):
 
         login(request, user)
         return Response(serializers.UserSerializer(instance=user).data)
+
+
+class RegisterView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        user_serializer = serializers.UserSerializer(data=request.data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        return Response(serializers.UserSerializer(user).data)

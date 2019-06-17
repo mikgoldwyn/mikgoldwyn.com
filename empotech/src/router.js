@@ -5,18 +5,19 @@ import Home from './views/Home.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
 
+import store from './store/'
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: Home,
     },
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login,
     },
@@ -27,3 +28,13 @@ export default new Router({
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  if ((to.name === 'login' || to.name === 'registration') && store.state.user.id) {
+    return next({ name: 'home' });
+  }
+
+  return next();
+});
+
+export default router

@@ -12,4 +12,23 @@ export default {
     state.loading = false;
     state.user = {};
   },
+
+  registerRequest(state) {
+    state.loading = true;
+  },
+  registerSuccess(state, data) {
+    state.loading = false;
+  },
+  registerFailure(state) {
+    state.loading = false;
+  },
+
+  showSnackbarSuccess(state, message) {
+    state.snackbar.message = message;
+    state.snackbar.show = true;
+  },
+  hideSnackbarSuccess(state) {
+    state.snackbar.message = null;
+    state.snackbar.show = false;
+  }
 };

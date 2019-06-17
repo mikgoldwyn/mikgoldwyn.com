@@ -1,4 +1,8 @@
 export default {
+  snackbar: {
+    show: false,
+    message: null,
+  },
   loading: false,
   user: {},
   apiURL: () => {

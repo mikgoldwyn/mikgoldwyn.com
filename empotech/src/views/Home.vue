@@ -15,3 +15,23 @@
     </v-content>
   </v-app>
 </template>
+
+<script>
+import { mapState, mapActions } from "vuex";
+
+export default {
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    ...mapActions(['login']),
+    formSubmit () {
+      if (this.$refs.form.validate()) {
+        this.login({ username: this.user_data.username, password: this.user_data.password })
+      }
+    }
+  },
+}
+</script>
