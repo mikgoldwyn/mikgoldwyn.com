@@ -27,7 +27,7 @@
                     ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn block flat color="pink" @click="$router.push({ name: 'registration' })">Register</v-btn>
+                  <!-- <v-btn block flat color="pink" @click="$router.push({ name: 'registration' })">Register</v-btn> -->
                   <v-btn block flat color="pink" type="submit">Login</v-btn>
                 </v-card-actions>
               </v-form>
