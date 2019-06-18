@@ -5,6 +5,9 @@ from django.db import models
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.user.last_name.title()}, {self.user.first_name.title()}'
+
 
 class Attendance(models.Model):
     date = models.DateField(auto_now_add=True)
@@ -12,3 +15,6 @@ class Attendance(models.Model):
 
     class Meta:
         unique_together = [['date', 'student']]
+
+    def __str__(self):
+        return f'{self.student} ({self.date.strftime("%A, %d %B %Y")})'
