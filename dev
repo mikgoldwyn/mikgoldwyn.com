@@ -56,8 +56,7 @@ function restart {
 
 function reset_all {
   restart
-  pip
-  remigrate
+  migrate
   create_superuser
   docker-compose logs -f --tail=1000
 }

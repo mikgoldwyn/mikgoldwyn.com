@@ -106,7 +106,6 @@ function npm_install {
 function reset_all {
   # Use this if you want to do it all (this takes time)
   restart
-  pip
   migrate
   collectstatic
   systemctl reload nginx
