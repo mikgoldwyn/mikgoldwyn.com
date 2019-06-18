@@ -1,5 +1,7 @@
 <template>
   <v-app id="inspire" dark>
+    <SnackBar
+    />
     <v-content>
       <v-container fill-height>
         <v-layout row align-center justify-center>
@@ -30,8 +32,12 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import SnackBar from '@/components/SnackBar.vue'
 
 export default {
+  components: {
+    SnackBar
+  },
   data () {
     return {
       valid: false,
@@ -45,10 +51,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['register']),
+    ...mapActions(['register', 'showSnackbar']),
     formSubmit () {
       if (this.$refs.form.validate()) {
         this.register(this.user_data)
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
+        .catch((error) => {
+          this.showSnackbar(error.response.data.username[0])
+        })
       }
     },
   },
