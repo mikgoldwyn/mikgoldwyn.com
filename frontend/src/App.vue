@@ -5,6 +5,11 @@
 </template>
 
 <style>
+
+html {
+  overflow-y: hidden !important;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,4 +21,5 @@
 .wf-loading .material-icons {
   display: none;
 }
+
 </style>
