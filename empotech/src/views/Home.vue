@@ -23,7 +23,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
-      color="red"
+      color="#4DBA87"
       dense
       fixed
       clipped-left
@@ -34,7 +34,7 @@
         <span class="title">EmpoTech GinGerGrace</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu bottom left>
+      <v-menu offset-y nudge-bottom="6">
         <template v-slot:activator="{ on }">
           <v-btn
             dark
