@@ -118,6 +118,9 @@ function logs {
 
 function pull_and_deploy {
   git pull
+  docker-compose -f prod.docker-compose.yml restart api
+  migrate
+  npm_install
   systemctl reload nginx
 }
 
