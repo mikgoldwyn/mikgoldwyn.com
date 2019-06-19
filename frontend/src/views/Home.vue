@@ -1,100 +1,15 @@
 <template>
-  <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      clipped
-      class="grey lighten-4"
-      app
-    >
-      <v-list
-        dense
-        class="grey lighten-4"
-      >
-        <template v-for="(item, i) in items">
-          <v-layout
-            v-if="item.heading"
-            :key="i"
-            row
-            align-center
-          >
-            <v-flex xs6>
-              <v-subheader v-if="item.heading">
-                {{ item.heading }}
-              </v-subheader>
-            </v-flex>
-            <v-flex xs6 class="text-xs-right">
-              <v-btn small flat>edit</v-btn>
-            </v-flex>
-          </v-layout>
-          <v-divider
-            v-else-if="item.divider"
-            :key="i"
-            dark
-            class="my-3"
-          ></v-divider>
-          <v-list-tile
-            v-else
-            :key="i"
-            @click=""
-          >
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title class="grey--text">
-                {{ item.text }}
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar color="amber" app absolute clipped-left>
-      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-      <span class="title ml-3 mr-5">Mik&nbsp;<span class="font-weight-light">Goldwyn</span></span>
-      <v-text-field
-        solo
-        background-color="rgba(0,0,0,0.16)"
-        color="rgba(0,0,0,.54)"
-        flat
-        hide-details
-        label="Search"
-        prepend-inner-icon="search"
-      ></v-text-field>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+  <v-app id="inspire" dark style="background-color: #4DBA87">
     <v-content>
-      <v-container fluid fill-height class="grey lighten-4">
-        <v-layout justify-center align-center>
-
+      <v-container fluid>
+        <v-layout align-start>
+          <v-flex xs12>
+            <div class="display-3 font-weight-medium mt-5">
+              Wait I'm still busy ;)
+            </div>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-content>
   </v-app>
 </template>
-
-<script>
-  export default {
-    name: 'home',
-    data: () => ({
-      drawer: null,
-      items: [
-        { icon: 'lightbulb_outline', text: 'Notes' },
-        { icon: 'touch_app', text: 'Reminders' },
-        { divider: true },
-        { heading: 'Labels' },
-        { icon: 'add', text: 'Create new label' },
-        { divider: true },
-        { icon: 'archive', text: 'Archive' },
-        { icon: 'delete', text: 'Trash' },
-        { divider: true },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'chat_bubble', text: 'Trash' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'phonelink', text: 'App downloads' },
-        { icon: 'keyboard', text: 'Keyboard shortcuts' }
-      ]
-    }),
-  }
-</script>
