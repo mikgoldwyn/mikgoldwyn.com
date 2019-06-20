@@ -3,6 +3,8 @@
     id="inspire"
     dark
   >
+  <SnackBar
+  />
     <v-navigation-drawer
       v-model="drawer"
       fixed
@@ -86,11 +88,13 @@
 import { mapState, mapActions } from "vuex";
 import VueQRCodeComponent from 'vue-qrcode-component'
 import { QrcodeStream } from 'vue-qrcode-reader'
+import SnackBar from '@/components/SnackBar.vue'
 
 export default {
   components: {
     qrCode: VueQRCodeComponent,
-    QrcodeStream
+    QrcodeStream,
+    SnackBar
   },
   computed: {
     ...mapState(['user', 'apiURL']),
@@ -103,13 +107,15 @@ export default {
     showScanner: false,
   }),
   methods: {
-    ...mapActions(['logout', 'getUserData', 'addAttendance']),
+    ...mapActions(['logout', 'getUserData', 'addAttendance', 'showSnackbar']),
     onDecode (decodedString) {
       this.addAttendance(decodedString)
         .then(() => {
           this.showScanner = false;
+          this.showSnackbar('Attendance added successfully')
         })
         .catch(() => {
+          this.showSnackbar('Failed to add attendance, check if it is already added')
           this.showScanner = false;
         })
     },
