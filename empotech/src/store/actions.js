@@ -47,4 +47,17 @@ export default {
   hideSnackbar({ commit }) {
     commit('hideSnackbarSuccess');
   },
+  getUserData({ commit, state }) {
+    commit('getUserDataRequest');
+    return axios
+      .get(`${state.apiURL()}/empotech/user/me/`)
+      .then((response) => {
+        commit('getUserDataSuccess', response.data);
+        return response;
+      })
+      .catch((error) => {
+        commit('getUserDataFailure', error);
+        throw error;
+      });
+  },
 };

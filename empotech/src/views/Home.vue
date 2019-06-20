@@ -10,13 +10,23 @@
       app
     >
       <v-list >
-        <v-list-tile v-for="item in items" :key="item.text" @click="">
+        <v-list-tile  @click="">
           <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>playlist_add</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
-              {{ item.text }}
+              Attendance
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile  @click="showScanner = ! showScanner" v-if="user.is_superuser">
+          <v-list-tile-action>
+            <v-icon>linked_camera</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Scan QR Attendance
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -55,7 +65,17 @@
     <v-content>
       <v-container fill-height>
         <v-layout justify-center align-center>
-
+          <qrcode-stream
+            v-if="showScanner"
+            @decode="onDecode"
+          >
+          </qrcode-stream>
+          <qr-code
+              v-if="! user.is_superuser"
+              :text="studentEndpoint"
+              :size="500"
+              error-level="L">
+          </qr-code>
         </v-layout>
       </v-container>
     </v-content>
@@ -64,17 +84,31 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import VueQRCodeComponent from 'vue-qrcode-component'
+import { QrcodeStream } from 'vue-qrcode-reader'
 
 export default {
+  components: {
+    qrCode: VueQRCodeComponent,
+    QrcodeStream
+  },
+  computed: {
+    ...mapState(['user', 'apiURL']),
+    studentEndpoint () {
+      return `${this.apiURL()}/empotech/user/${this.user.id}/add-attendance/`
+    }
+  },
   data: () => ({
     drawer: null,
-    items: [
-      { icon: 'home', text: 'Home' },
-    ],
+    showScanner: false,
   }),
   methods: {
-    ...mapActions(['logout']),
-    performLogout() {
+    ...mapActions(['logout', 'getUserData']),
+    onDecode (decodedString) {
+      alert(decodedString)
+      this.showScanner = false;
+    },
+    performLogout () {
       this.logout()
         .then(() => {
           this.$router.push({ name: 'login' })
@@ -83,6 +117,11 @@ export default {
           this.$router.push({ name: 'login' })
         })
     }
-  }
+  },
+  mounted () {
+    if (this.user.id) {
+      this.getUserData()
+    }
+  },
 }
 </script>

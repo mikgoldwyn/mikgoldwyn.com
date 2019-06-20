@@ -18,7 +18,8 @@ class LoginView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         login(request, user)
-        return Response(serializers.UserSerializer(instance=user).data)
+        data = serializers.UserSerializer(instance=user).data
+        return Response(data)
 
 
 class RegisterView(APIView):

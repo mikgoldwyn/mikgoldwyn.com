@@ -35,6 +35,18 @@ export default {
     state.loading = false;
   },
 
+  getUserDataRequest(state) {
+    state.loading = true;
+  },
+  getUserDataSuccess(state, data) {
+    state.loading = false;
+    state.user = data;
+  },
+  getUserDataFailure(state) {
+    state.loading = false;
+    state.user = {};
+  },
+
   showSnackbarSuccess(state, message) {
     state.snackbar.message = message;
     state.snackbar.show = true;
