@@ -103,10 +103,15 @@ export default {
     showScanner: false,
   }),
   methods: {
-    ...mapActions(['logout', 'getUserData']),
+    ...mapActions(['logout', 'getUserData', 'addAttendance']),
     onDecode (decodedString) {
-      alert(decodedString)
-      this.showScanner = false;
+      this.addAttendance(decodedString)
+        .then(() => {
+          this.showScanner = false;
+        })
+        .catch(() => {
+          this.showScanner = false;
+        })
     },
     performLogout () {
       this.logout()
