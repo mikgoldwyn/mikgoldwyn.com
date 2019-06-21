@@ -64,6 +64,7 @@
           >
         </qrcode-capture>
         <v-btn
+          v-if="user.is_superuser"
           color="success"
           @click="performQRCodeCaptureClick"
         >
