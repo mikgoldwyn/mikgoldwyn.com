@@ -20,8 +20,8 @@ class UserViewset(viewsets.ModelViewSet):
     def me(self, request):
         return Response(self.get_serializer(request.user).data)
 
-    @action(detail=True, methods=['post'], url_path='add-attendance')
-    def add_attendance(self, request, id):
-        user = self.get_object()
+    @action(detail=False, methods=['post'], url_path='add-attendance')
+    def add_attendance(self, request):
+        user = User.objects.get(id=request.data['user_id'])
         user.student.attendance.create()
         return Response()
