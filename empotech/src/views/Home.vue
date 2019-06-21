@@ -57,20 +57,6 @@
     <v-content>
       <v-container fill-height>
         <v-layout justify-center align-center>
-          <qrcode-capture
-            @detect="onDetect"
-            v-show="false"
-            ref="qrCodeCapture"
-          >
-        </qrcode-capture>
-        <v-btn
-          v-if="user.is_superuser"
-          color="success"
-          @click="performQRCodeCaptureClick"
-        >
-          Upload QR Code
-          <v-icon right dark>cloud_upload</v-icon>
-        </v-btn>
           <qr-code
               v-if="! user.is_superuser"
               :text="studentEndpoint"
@@ -86,13 +72,11 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import VueQRCodeComponent from 'vue-qrcode-component'
-import { QrcodeCapture } from 'vue-qrcode-reader'
 import SnackBar from '@/components/SnackBar.vue'
 
 export default {
   components: {
     qrCode: VueQRCodeComponent,
-    QrcodeCapture,
     SnackBar
   },
   computed: {
@@ -105,25 +89,7 @@ export default {
     drawer: null,
   }),
   methods: {
-    ...mapActions(['logout', 'getUserData', 'addAttendance', 'showSnackbar']),
-    performQRCodeCaptureClick () {
-      this.$refs.qrCodeCapture.$el.click()
-    },
-    async onDetect (promise) {
-      const decodedString = await promise.content
-      if (! decodedString) {
-        this.showSnackbar('Failed to read QR code, try again')
-        return
-      }
-      this.addAttendance(decodedString)
-        .then(() => {
-          this.showSnackbar('Attendance added successfully')
-        })
-        .catch(() => {
-          this.showSnackbar('Failed to add attendance, check if it is already added')
-        })
-
-    },
+    ...mapActions(['logout', 'getUserData', 'showSnackbar']),
     performLogout () {
       this.logout()
         .then(() => {
