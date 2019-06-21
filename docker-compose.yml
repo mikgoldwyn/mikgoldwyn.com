@@ -5,13 +5,13 @@ services:
     image: postgres
   api:
     build: ./api
-    command: bash -c "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:80"
+    command: bash -c "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./api:/app/api
       - ./frontend:/app/frontend
       - ./empotech:/app/empotech
     ports:
-      - "80:80"
+      - "8000:8000"
     stdin_open: true
     tty: true
   frontend:
