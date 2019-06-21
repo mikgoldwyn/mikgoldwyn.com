@@ -75,7 +75,7 @@
           <qr-code
               v-if="! user.is_superuser"
               :text="studentEndpoint"
-              :size="500"
+              :size="200"
               error-level="L">
           </qr-code>
         </v-layout>
