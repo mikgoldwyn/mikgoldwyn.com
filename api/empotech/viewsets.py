@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -20,8 +20,10 @@ class UserViewset(viewsets.ModelViewSet):
     def me(self, request):
         return Response(self.get_serializer(request.user).data)
 
-    @action(detail=False, methods=['post'], url_path='add-attendance')
+    @action(detail=False, methods=['post'], url_path='add-attendance', permission_classes=[permissions.AllowAny])
     def add_attendance(self, request):
+        if request.data['secret_key'] != 'a_very_secret_key':
+            return Response(status=status.HTTP_401_UNAUTHORIZED, data='Invalid secret key')
         user = User.objects.get(id=request.data['user_id'])
         user.student.attendance.create()
         return Response()
