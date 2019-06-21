@@ -113,6 +113,8 @@ export default {
           .then((result) => {
             alert(result.text)
           })
+      } else {
+        this.codeReader.reset()
       }
 
     },
