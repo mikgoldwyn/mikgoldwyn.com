@@ -55,14 +55,38 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-      <v-container fill-height>
+      <v-container fill-height align-content-center>
         <v-layout justify-center align-center>
-          <qr-code
-              v-if="! user.is_superuser"
-              :text="qrCodeValue"
-              :size="200"
-              error-level="L">
-          </qr-code>
+          <v-flex
+            v-if="! user.is_superuser"
+            sm12
+          >
+            <qr-code
+                style="display: block;margin-left: auto;margin-right: auto;width: 200px;"
+                :text="qrCodeValue"
+                :size="200"
+                error-level="L">
+            </qr-code>
+          </v-flex>
+          <v-flex
+            sm12
+            v-if="user.is_superuser"
+          >
+            <video
+              v-if="selectedVideoDevice.deviceID"
+              id="video"
+              width="300"
+              height="200"
+              style="border: 1px solid gray"
+            ></video>
+            <v-select
+              v-model="selectedVideoDevice"
+              :items="videoDevices"
+              item-text="label"
+              return-object
+            >
+            </v-select>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-content>
@@ -72,12 +96,22 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import VueQRCodeComponent from 'vue-qrcode-component'
+import { BrowserQRCodeReader } from '@zxing/library';
 import SnackBar from '@/components/SnackBar.vue'
 
 export default {
   components: {
     qrCode: VueQRCodeComponent,
     SnackBar
+  },
+  watch: {
+    selectedVideoDevice (selectedVideoDevice) {
+      this.codeReader
+        .decodeFromInputVideoDevice(selectedVideoDevice.deviceID, 'video')
+        .then((result) => {
+          alert(result.text)
+        })
+    },
   },
   computed: {
     ...mapState(['user', 'apiURL']),
@@ -88,6 +122,9 @@ export default {
   },
   data: () => ({
     drawer: null,
+    videoDevices: [{ label: 'Select a camera' }],
+    codeReader: new BrowserQRCodeReader(),
+    selectedVideoDevice: { label: 'Select a camera' },
   }),
   methods: {
     ...mapActions(['logout', 'getUserData', 'showSnackbar']),
@@ -102,6 +139,14 @@ export default {
     }
   },
   mounted () {
+    this.codeReader
+      .listVideoInputDevices()
+      .then((videoInputDevices) => {
+        videoInputDevices.forEach((device) => {
+          this.videoDevices.push({ label: device.label, deviceID: device.deviceId })
+        })
+      })
+
     if (this.user.id) {
       this.getUserData()
     }
