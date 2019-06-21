@@ -59,7 +59,7 @@
         <v-layout justify-center align-center>
           <qr-code
               v-if="! user.is_superuser"
-              :text="toString(user.id)"
+              :text="qrCodeValue"
               :size="200"
               error-level="L">
           </qr-code>
@@ -81,6 +81,10 @@ export default {
   },
   computed: {
     ...mapState(['user', 'apiURL']),
+    qrCodeValue () {
+      const userID = this.user.id
+      return userID.toString()
+    }
   },
   data: () => ({
     drawer: null,
