@@ -11,6 +11,8 @@ class Student(models.Model):
 
 class Attendance(models.Model):
     date = models.DateField(auto_now_add=True)
+
+    # Related fields
     student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='attendances')
 
     class Meta:
@@ -18,3 +20,18 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f'{self.student} ({self.date.strftime("%A, %d %B %Y")})'
+
+
+class Grade(models.Model):
+    TYPES = [
+        ('activity', 'Activity')
+    ]
+    score = models.PositiveSmallIntegerField()
+    total = models.PositiveSmallIntegerField()
+    type = models.CharField(choices=TYPES, max_length=25)
+
+    # Related fields
+    student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='grades')
+
+    def __str__(self):
+        return f'{self.get_type_display()} -- ({self.score}/{self.total})'
