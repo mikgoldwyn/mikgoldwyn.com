@@ -106,11 +106,15 @@ export default {
   },
   watch: {
     selectedVideoDevice (selectedVideoDevice) {
-      this.codeReader
-        .decodeFromInputVideoDevice(selectedVideoDevice.deviceID, 'video')
-        .then((result) => {
-          alert(result.text)
-        })
+
+      if (selectedVideoDevice.deviceID) {
+        this.codeReader
+          .decodeFromInputVideoDevice(selectedVideoDevice.deviceID, 'video')
+          .then((result) => {
+            alert(result.text)
+          })
+      }
+
     },
   },
   computed: {
