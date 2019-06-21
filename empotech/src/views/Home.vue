@@ -22,16 +22,6 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile  @click="showScanner = ! showScanner" v-if="user.is_superuser">
-          <v-list-tile-action>
-            <v-icon>linked_camera</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Scan QR Attendance
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -67,11 +57,19 @@
     <v-content>
       <v-container fill-height>
         <v-layout justify-center align-center>
-          <qrcode-stream
-            v-if="showScanner"
+          <qrcode-capture
             @decode="onDecode"
+            v-show="false"
+            ref="qrCodeCapture"
           >
-          </qrcode-stream>
+        </qrcode-capture>
+        <v-btn
+          color="success"
+          @click="performQRCodeCaptureClick"
+        >
+          Upload QR Code
+          <v-icon right dark>cloud_upload</v-icon>
+        </v-btn>
           <qr-code
               v-if="! user.is_superuser"
               :text="studentEndpoint"
@@ -87,13 +85,13 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import VueQRCodeComponent from 'vue-qrcode-component'
-import { QrcodeStream } from 'vue-qrcode-reader'
+import { QrcodeCapture } from 'vue-qrcode-reader'
 import SnackBar from '@/components/SnackBar.vue'
 
 export default {
   components: {
     qrCode: VueQRCodeComponent,
-    QrcodeStream,
+    QrcodeCapture,
     SnackBar
   },
   computed: {
@@ -108,7 +106,12 @@ export default {
   }),
   methods: {
     ...mapActions(['logout', 'getUserData', 'addAttendance', 'showSnackbar']),
+    performQRCodeCaptureClick () {
+      this.$refs.qrCodeCapture.$el.click()
+    },
     onDecode (decodedString) {
+      console.log(decodedString)
+      console.log('wassup')
       this.addAttendance(decodedString)
         .then(() => {
           this.showScanner = false;
