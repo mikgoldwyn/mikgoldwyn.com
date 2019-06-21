@@ -58,7 +58,7 @@
       <v-container fill-height>
         <v-layout justify-center align-center>
           <qrcode-capture
-            @decode="onDecode"
+            @detect="onDetect"
             v-show="false"
             ref="qrCodeCapture"
           >
@@ -102,25 +102,26 @@ export default {
   },
   data: () => ({
     drawer: null,
-    showScanner: false,
   }),
   methods: {
     ...mapActions(['logout', 'getUserData', 'addAttendance', 'showSnackbar']),
     performQRCodeCaptureClick () {
       this.$refs.qrCodeCapture.$el.click()
     },
-    onDecode (decodedString) {
-      console.log(decodedString)
-      console.log('wassup')
+    async onDetect (promise) {
+      const decodedString = await promise.content
+      if (! decodedString) {
+        this.showSnackbar('Failed to read QR code, try again')
+        return
+      }
       this.addAttendance(decodedString)
         .then(() => {
-          this.showScanner = false;
           this.showSnackbar('Attendance added successfully')
         })
         .catch(() => {
           this.showSnackbar('Failed to add attendance, check if it is already added')
-          this.showScanner = false;
         })
+
     },
     performLogout () {
       this.logout()
