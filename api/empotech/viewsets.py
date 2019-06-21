@@ -22,6 +22,7 @@ class UserViewset(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='add-attendance', permission_classes=[permissions.AllowAny])
     def add_attendance(self, request):
+        return Response('testing')
         if request.query_params['secret_key'] != 'a_very_secret_key':
             return Response(status=status.HTTP_401_UNAUTHORIZED, data='Invalid secret key')
         user = User.objects.get(id=request.query_params['text'])
