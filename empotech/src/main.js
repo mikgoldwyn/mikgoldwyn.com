@@ -9,8 +9,6 @@ import './registerServiceWorker';
 
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import 'vuetify/dist/vuetify.min.css';
-import 'vue-qrcode-reader/dist/vue-qrcode-reader.css';
-import 'vue-qrcode-reader/dist/vue-qrcode-reader.browser.js';
 
 
 Vue.config.productionTip = false;

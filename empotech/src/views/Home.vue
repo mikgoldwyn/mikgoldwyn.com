@@ -59,7 +59,7 @@
         <v-layout justify-center align-center>
           <qr-code
               v-if="! user.is_superuser"
-              :text="user.id"
+              :text="toString(user.id)"
               :size="200"
               error-level="L">
           </qr-code>
