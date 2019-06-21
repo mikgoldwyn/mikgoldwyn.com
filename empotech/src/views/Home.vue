@@ -59,7 +59,7 @@
         <v-layout justify-center align-center>
           <qr-code
               v-if="! user.is_superuser"
-              :text="studentEndpoint"
+              :text="user.id"
               :size="200"
               error-level="L">
           </qr-code>
@@ -81,9 +81,6 @@ export default {
   },
   computed: {
     ...mapState(['user', 'apiURL']),
-    studentEndpoint () {
-      return `${this.apiURL()}/empotech/user/${this.user.id}/add-attendance/`
-    }
   },
   data: () => ({
     drawer: null,
