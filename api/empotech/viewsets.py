@@ -15,7 +15,7 @@ class UserViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         if not self.request.user.is_superuser:
-            queryset.filter(id=self.request.user.id)
+            queryset = queryset.filter(id=self.request.user.id)
         return queryset
 
     @action(detail=False)
@@ -44,5 +44,5 @@ class GradeViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         if not self.request.user.is_superuser and hasattr(self.request.user, 'student'):
-            queryset.filter(student=self.request.user.student)
+            queryset = queryset.filter(student=self.request.user.student)
         return queryset
