@@ -32,6 +32,17 @@ class UserViewset(viewsets.ModelViewSet):
             created = False
 
         return Response({
-            'user_full_name': f'{user.get_full_name()}',
+            'user_full_name': f'{user.get_full_name().title()}',
             'created': created,
         })
+
+
+class GradeViewset(viewsets.ModelViewSet):
+    queryset = models.Grade.objects.all()
+    serializer_class = serializers.GradeSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if not self.request.user.is_superuser and hasattr(self.request.user, 'student'):
+            queryset.filter(student=self.request.user.student)
+        return queryset

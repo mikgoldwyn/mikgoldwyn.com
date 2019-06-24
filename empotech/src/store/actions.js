@@ -60,4 +60,17 @@ export default {
         throw error;
       });
   },
+  getGrades({ commit, state }) {
+    commit('getGradesRequest');
+    return axios
+      .get(`${state.apiURL()}/empotech/grade/`)
+      .then((response) => {
+        commit('getGradesSuccess', response.data);
+        return response;
+      })
+      .catch((error) => {
+        commit('getGradesFailure', error);
+        throw error;
+      });
+  },
 };

@@ -4,7 +4,7 @@
     <Navigation/>
     <v-content>
       <v-container fill-height align-content-center>
-        <v-layout justify-center align-center>
+        <v-layout justify-center column>
           <v-flex
             v-if="! user.is_superuser"
             sm12
@@ -34,6 +34,22 @@
             >
             </v-select>
           </v-flex>
+          <v-flex
+            v-if="! user.is_superuser"
+            sm12
+          >
+            <v-data-table
+              :headers="table.headers"
+              :items="table.items"
+              class="elevation-1"
+            >
+              <template v-slot:items="props">
+                <td class="text-xs-center">{{ props.item.score }}</td>
+                <td class="text-xs-center">{{ props.item.total }}</td>
+                <td class="text-xs-center">{{ props.item.type }}</td>
+              </template>
+            </v-data-table>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-content>
@@ -42,7 +58,7 @@
 
 <script>
 import axios from 'axios';
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex';
 import VueQRCodeComponent from 'vue-qrcode-component'
 import { BrowserQRCodeReader } from '@zxing/library';
 
@@ -82,7 +98,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['user', 'apiURL']),
+    ...mapState(['user', 'apiURL', 'grades']),
     qrCodeValue () {
       const userID = this.user.id
       return userID.toString()
@@ -93,9 +109,17 @@ export default {
     videoDevices: [{ label: 'Select a camera' }],
     codeReader: new BrowserQRCodeReader(),
     selectedVideoDevice: { label: 'Select a camera' },
+    table: {
+      headers: [
+        { text: 'Score', value: 'score', align: 'center' },
+        { text: 'Total', value: 'total', align: 'center' },
+        { text: 'Type', value: 'type', align: 'center' },
+      ],
+      items: []
+    }
   }),
   methods: {
-    ...mapActions(['logout', 'showSnackbar']),
+    ...mapActions(['logout', 'showSnackbar', 'getGrades']),
     performLogout () {
       this.logout()
         .then(() => {
@@ -106,7 +130,10 @@ export default {
         })
     }
   },
-  mounted () {
+  created () {
+    if (! this.user.id) {
+      this.$router.push({ name: 'login' })
+    }
     this.codeReader
       .listVideoInputDevices()
       .then((videoInputDevices) => {
@@ -114,6 +141,16 @@ export default {
           this.videoDevices.push({ label: device.label, deviceID: device.deviceId })
         })
       })
+
+    if (this.user.is_superuser) {
+
+    } else {
+      this.getGrades()
+        .then(() => {
+          this.table.items = this.grades
+        })
+    }
+
   },
 }
 </script>

@@ -47,6 +47,18 @@ export default {
     state.user = {};
   },
 
+  getGradesRequest(state) {
+    state.loading = true;
+  },
+  getGradesSuccess(state, data) {
+    state.loading = false;
+    state.grades = data;
+  },
+  getGradesFailure(state) {
+    state.loading = false;
+    state.grades = [];
+  },
+
   showSnackbarSuccess(state, message) {
     state.snackbar.message = message;
     state.snackbar.show = true;

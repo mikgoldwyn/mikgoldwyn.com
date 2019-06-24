@@ -36,4 +36,4 @@ class Grade(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='grades')
 
     def __str__(self):
-        return f'{self.student.user.get_full_name()} -- {self.get_type_display()} ({self.score}/{self.total})'
+        return f'{self.student.user.get_full_name().title()} -- {self.get_type_display()} ({self.score}/{self.total})'

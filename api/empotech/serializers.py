@@ -37,3 +37,11 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = '__all__'
+
+
+class GradeSerializer(serializers.ModelSerializer):
+    student_display = serializers.CharField(source='student.__str__', read_only=True)
+
+    class Meta:
+        model = models.Grade
+        fields = '__all__'

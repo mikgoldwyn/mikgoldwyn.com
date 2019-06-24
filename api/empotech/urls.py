@@ -8,6 +8,7 @@ from . import viewsets
 
 router = DefaultRouter()
 router.register(r'user', viewsets.UserViewset, base_name='user')
+router.register(r'grade', viewsets.GradeViewset, base_name='grade')
 
 urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
