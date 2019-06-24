@@ -25,7 +25,6 @@
               id="video"
               width="300"
               height="200"
-              style="border: 1px solid gray"
             ></video>
             <v-select
               v-model="selectedVideoDevice"
