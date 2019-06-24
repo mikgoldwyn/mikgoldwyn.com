@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from model_utils import Choices
 
 
 class Student(models.Model):
@@ -23,9 +24,10 @@ class Attendance(models.Model):
 
 
 class Grade(models.Model):
-    TYPES = [
-        ('activity', 'Activity')
-    ]
+    TYPES = Choices(
+        ('activity', 'Activity'),
+    )
+
     score = models.PositiveSmallIntegerField()
     total = models.PositiveSmallIntegerField()
     type = models.CharField(choices=TYPES, max_length=25)
