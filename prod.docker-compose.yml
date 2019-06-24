@@ -4,6 +4,8 @@ services:
   db:
     image: postgres
   api:
+    depends_on:
+      - db
     env_file:
       - ./api/prod.env
     build:
