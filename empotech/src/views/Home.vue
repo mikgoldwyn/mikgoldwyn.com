@@ -1,59 +1,7 @@
 <template>
-  <v-app
-    id="inspire"
-    dark
-  >
-  <SnackBar
-  />
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      clipped
-      app
-    >
-      <v-list >
-        <v-list-tile  @click="">
-          <v-list-tile-action>
-            <v-icon>playlist_add</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Attendance
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar
-      color="#4DBA87"
-      dense
-      fixed
-      clipped-left
-      app
-    >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title class="mr-5 align-center">
-        <span class="title">EmpoTech GinGerGrace</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-menu offset-y nudge-bottom="6">
-        <template v-slot:activator="{ on }">
-          <v-btn
-            dark
-            icon
-            v-on="on"
-          >
-            <v-icon>more_vert</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-tile @click="performLogout()">
-            <v-list-tile-title>Logout</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </v-toolbar>
+  <v-app id="inspire" dark>
+    <SnackBar/>
+    <Navigation/>
     <v-content>
       <v-container fill-height align-content-center>
         <v-layout justify-center align-center>
@@ -94,24 +42,39 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapState, mapActions } from "vuex";
 import VueQRCodeComponent from 'vue-qrcode-component'
 import { BrowserQRCodeReader } from '@zxing/library';
+
 import SnackBar from '@/components/SnackBar.vue'
+import Navigation from '@/components/Navigation.vue'
 
 export default {
   components: {
     qrCode: VueQRCodeComponent,
-    SnackBar
+    SnackBar,
+    Navigation,
   },
   watch: {
     selectedVideoDevice (selectedVideoDevice) {
 
       if (selectedVideoDevice.deviceID) {
         this.codeReader
-          .decodeFromInputVideoDevice(selectedVideoDevice.deviceID, 'video')
-          .then((result) => {
-            alert(result.text)
+          .decodeFromInputVideoDeviceContinuously(selectedVideoDevice.deviceID, 'video', (result, err) => {
+            if (result) {
+              axios.post(`${this.apiURL()}/empotech/user/${result}/add-attendance/`)
+                .then((response) => {
+                  const data = response.data
+                  if (data.created) {
+                    this.showSnackbar(`Attendance for ${data.user_full_name} successfully created`)
+                    window.navigator.vibrate(200)
+                  } else {
+                    this.showSnackbar(`Attendance for ${data.user_full_name} already exists`)
+                    window.navigator.vibrate(200)
+                  }
+                })
+            }
           })
       } else {
         this.codeReader.reset()
@@ -133,7 +96,7 @@ export default {
     selectedVideoDevice: { label: 'Select a camera' },
   }),
   methods: {
-    ...mapActions(['logout', 'getUserData', 'showSnackbar']),
+    ...mapActions(['logout', 'showSnackbar']),
     performLogout () {
       this.logout()
         .then(() => {
@@ -152,10 +115,6 @@ export default {
           this.videoDevices.push({ label: device.label, deviceID: device.deviceId })
         })
       })
-
-    if (this.user.id) {
-      this.getUserData()
-    }
   },
 }
 </script>
