@@ -46,3 +46,14 @@ class GradeViewset(viewsets.ModelViewSet):
         if not self.request.user.is_superuser and hasattr(self.request.user, 'student'):
             queryset = queryset.filter(student=self.request.user.student)
         return queryset
+
+
+class AttendanceViewset(viewsets.ModelViewSet):
+    queryset = models.Attendance.objects.all()
+    serializer_class = serializers.AttendanceSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if not self.request.user.is_superuser and hasattr(self.request.user, 'student'):
+            queryset = queryset.filter(student=self.request.user.student)
+        return queryset

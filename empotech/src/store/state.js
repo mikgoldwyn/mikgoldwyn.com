@@ -6,6 +6,7 @@ export default {
   loading: false,
   user: {},
   grades: [],
+  attendances: [],
   apiURL: () => {
     const urlFragments = window.location.host.split('.');
     urlFragments[0] = 'api';

@@ -59,6 +59,18 @@ export default {
     state.grades = [];
   },
 
+  getAttendancesRequest(state) {
+    state.loading = true;
+  },
+  getAttendancesSuccess(state, data) {
+    state.loading = false;
+    state.attendances = data;
+  },
+  getAttendancesFailure(state) {
+    state.loading = false;
+    state.attendances = [];
+  },
+
   showSnackbarSuccess(state, message) {
     state.snackbar.message = message;
     state.snackbar.show = true;

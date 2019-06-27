@@ -1,7 +1,6 @@
 <template>
   <v-app id="inspire" dark>
-    <SnackBar
-    />
+    <SnackBar/>
     <v-content>
       <v-container fill-height>
         <v-layout row align-center justify-center>

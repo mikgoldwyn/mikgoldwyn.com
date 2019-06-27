@@ -73,4 +73,17 @@ export default {
         throw error;
       });
   },
+  getAttendances({ commit, state }) {
+    commit('getAttendancesRequest');
+    return axios
+      .get(`${state.apiURL()}/empotech/attendance/`)
+      .then((response) => {
+        commit('getAttendancesSuccess', response.data);
+        return response;
+      })
+      .catch((error) => {
+        commit('getAttendancesFailure', error);
+        throw error;
+      });
+  },
 };

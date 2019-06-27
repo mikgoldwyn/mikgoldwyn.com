@@ -7,13 +7,23 @@
       app
     >
       <v-list >
-        <v-list-tile  @click="">
+        <v-list-tile  @click="$router.push({ name: 'home' })">
           <v-list-tile-action>
             <v-icon>playlist_add</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
               Attendance
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile  v-if="! user.is_superuser" @click="$router.push({ name: 'grade' })">
+          <v-list-tile-action>
+            <v-icon>grade</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Grade
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -54,29 +64,19 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import VueQRCodeComponent from 'vue-qrcode-component'
-import { BrowserQRCodeReader } from '@zxing/library';
 import SnackBar from '@/components/SnackBar.vue'
 
 export default {
   components: {
-    qrCode: VueQRCodeComponent,
     SnackBar
   },
   watch: {
-    selectedVideoDevice (selectedVideoDevice) {
-
-      if (selectedVideoDevice.deviceID) {
-        this.codeReader
-          .decodeFromInputVideoDevice(selectedVideoDevice.deviceID, 'video')
-          .then((result) => {
-            alert(result.text)
-          })
-      } else {
-        this.codeReader.reset()
+    user (oldData, newData) {
+      if (! this.user.id) {
+        this.$router.push({ name: 'login' })
       }
+    }
 
-    },
   },
   computed: {
     ...mapState(['user']),
@@ -88,12 +88,6 @@ export default {
     ...mapActions(['logout', 'getUserData']),
     performLogout () {
       this.logout()
-        .then(() => {
-          this.$router.push({ name: 'login' })
-        })
-        .catch(() => {
-          this.$router.push({ name: 'login' })
-        })
     }
   },
   mounted () {

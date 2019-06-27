@@ -22,6 +22,9 @@ class Attendance(models.Model):
     def __str__(self):
         return f'{self.student} ({self.date.strftime("%A, %d %B %Y")})'
 
+    def date_display(self):
+        return f'{self.date.strftime("%A, %d %B %Y")}'
+
 
 class Grade(models.Model):
     TYPES = Choices(

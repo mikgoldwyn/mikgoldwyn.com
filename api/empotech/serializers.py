@@ -45,3 +45,12 @@ class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Grade
         fields = '__all__'
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    student_display = serializers.CharField(source='student.__str__', read_only=True)
+    date_display = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = models.Attendance
+        fields = '__all__'

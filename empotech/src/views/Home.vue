@@ -3,18 +3,77 @@
     <SnackBar/>
     <Navigation/>
     <v-content>
-      <v-container fill-height align-content-center>
+      <v-container fill-height>
         <v-layout justify-center column>
           <v-flex
             v-if="! user.is_superuser"
             sm12
           >
-            <qr-code
+            <v-card :color="QRCardProps.backgroundColor" :light="QRCardProps.isLight">
+              <v-card-title primary-title>
+                <v-layout>
+                  <v-flex>
+                    <div class="headline">Attendance QR Code</div>
+                  </v-flex>
+                </v-layout>
+              </v-card-title>
+              <v-card-text>
+                <qr-code
                 style="display: block;margin-left: auto;margin-right: auto;width: 200px;"
                 :text="qrCodeValue"
                 :size="200"
                 error-level="L">
-            </qr-code>
+              </qr-code>
+              </v-card-text>
+              <v-card-actions>
+                <v-layout>
+                  <v-flex>
+                    <v-btn flat color="pink" @click="toggleQRBackground">Toggle Background</v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+          <v-flex
+            v-if="! user.is_superuser"
+            sm12
+          >
+            <v-card
+              max-height="300"
+              style="overflow-y: auto;"
+            >
+              <v-card-title primary-title>
+                <v-layout>
+                  <v-flex>
+                    <div class="headline">Attendance</div>
+                  </v-flex>
+                </v-layout>
+              </v-card-title>
+              <v-card-text>
+                <v-timeline>
+                    <v-timeline-item
+                      v-for="attendance in attendances"
+                      :key="attendance.id"
+                      color="pink"
+                      icon="calendar_today"
+                      large
+                    >
+                      <v-card class="elevation-4">
+                        <v-card-title class="headline">
+                          <v-layout>
+                            <v-flex>
+                              {{attendance.date_display}}
+                            </v-flex>
+                          </v-layout>
+                        </v-card-title>
+                      </v-card>
+                    </v-timeline-item>
+                  </v-timeline>
+              </v-card-text>
+              <v-card-actions>
+
+              </v-card-actions>
+            </v-card>
           </v-flex>
           <v-flex
             sm12
@@ -33,22 +92,6 @@
               return-object
             >
             </v-select>
-          </v-flex>
-          <v-flex
-            v-if="! user.is_superuser"
-            sm12
-          >
-            <v-data-table
-              :headers="table.headers"
-              :items="table.items"
-              class="elevation-1"
-            >
-              <template v-slot:items="props">
-                <td class="text-xs-center">{{ props.item.score }}</td>
-                <td class="text-xs-center">{{ props.item.total }}</td>
-                <td class="text-xs-center">{{ props.item.type }}</td>
-              </template>
-            </v-data-table>
           </v-flex>
         </v-layout>
       </v-container>
@@ -98,7 +141,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['user', 'apiURL', 'grades']),
+    ...mapState(['user', 'apiURL', 'grades', 'attendances']),
     qrCodeValue () {
       const userID = this.user.id
       return userID.toString()
@@ -109,17 +152,22 @@ export default {
     videoDevices: [{ label: 'Select a camera' }],
     codeReader: new BrowserQRCodeReader(),
     selectedVideoDevice: { label: 'Select a camera' },
-    table: {
-      headers: [
-        { text: 'Score', value: 'score', align: 'center' },
-        { text: 'Total', value: 'total', align: 'center' },
-        { text: 'Type', value: 'type', align: 'center' },
-      ],
-      items: []
+    QRCardProps: {
+      backgroundColor: "grey darken-3",
+      isLight: false,
     }
   }),
   methods: {
-    ...mapActions(['logout', 'showSnackbar', 'getGrades']),
+    ...mapActions(['logout', 'showSnackbar', 'getGrades', 'getAttendances']),
+    toggleQRBackground () {
+      if (this.QRCardProps.backgroundColor == 'grey darken-3') {
+        this.QRCardProps.backgroundColor = 'grey lighten-5'
+        this.QRCardProps.isLight = true
+      } else {
+        this.QRCardProps.backgroundColor = 'grey darken-3'
+        this.QRCardProps.isLight = false
+      }
+    },
     performLogout () {
       this.logout()
         .then(() => {
@@ -131,9 +179,6 @@ export default {
     }
   },
   created () {
-    if (! this.user.id) {
-      this.$router.push({ name: 'login' })
-    }
     this.codeReader
       .listVideoInputDevices()
       .then((videoInputDevices) => {
@@ -142,15 +187,7 @@ export default {
         })
       })
 
-    if (this.user.is_superuser) {
-
-    } else {
-      this.getGrades()
-        .then(() => {
-          this.table.items = this.grades
-        })
-    }
-
+    this.getAttendances()
   },
 }
 </script>
