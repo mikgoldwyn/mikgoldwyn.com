@@ -4,9 +4,10 @@
     <Navigation/>
     <v-content>
       <v-container fill-height>
-        <v-layout justify-center fill-height>
+        <v-layout justify-center fill-height row wrap>
           <v-flex
             sm12
+            py-2
           >
             <v-card>
               <v-card-title primary-text>

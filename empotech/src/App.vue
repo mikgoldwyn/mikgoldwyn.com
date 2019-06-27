@@ -11,7 +11,7 @@
 <style>
 
 html {
-  overflow-y: hidden !important;
+  overflow-y: auto !important;
 }
 
 #app {

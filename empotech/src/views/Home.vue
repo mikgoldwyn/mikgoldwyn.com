@@ -4,10 +4,11 @@
     <Navigation/>
     <v-content>
       <v-container fill-height>
-        <v-layout justify-center column>
+        <v-layout justify-center row wrap>
           <v-flex
             v-if="! user.is_superuser"
             sm12
+            py-2
           >
             <v-card :color="QRCardProps.backgroundColor" :light="QRCardProps.isLight">
               <v-card-title primary-title>
@@ -37,9 +38,9 @@
           <v-flex
             v-if="! user.is_superuser"
             sm12
+            py-2
           >
             <v-card
-              max-height="300"
               style="overflow-y: auto;"
             >
               <v-card-title primary-title>
@@ -50,25 +51,14 @@
                 </v-layout>
               </v-card-title>
               <v-card-text>
-                <v-timeline>
-                    <v-timeline-item
-                      v-for="attendance in attendances"
-                      :key="attendance.id"
-                      color="pink"
-                      icon="calendar_today"
-                      large
-                    >
-                      <v-card class="elevation-4">
-                        <v-card-title class="headline">
-                          <v-layout>
-                            <v-flex>
-                              {{attendance.date_display}}
-                            </v-flex>
-                          </v-layout>
-                        </v-card-title>
-                      </v-card>
-                    </v-timeline-item>
-                  </v-timeline>
+                <v-data-table
+                  :headers="table.headers"
+                  :items="table.items"
+                >
+                  <template v-slot:items="props">
+                    <td class="text-xs-center">{{ props.item.date_display }}</td>
+                  </template>
+                </v-data-table>
               </v-card-text>
               <v-card-actions>
 
@@ -77,6 +67,7 @@
           </v-flex>
           <v-flex
             sm12
+            py-2
             v-if="user.is_superuser"
           >
             <video
@@ -155,7 +146,13 @@ export default {
     QRCardProps: {
       backgroundColor: "grey darken-3",
       isLight: false,
-    }
+    },
+    table: {
+      headers: [
+        { text: 'Date', value: 'date_display', align: 'center' },
+      ],
+      items: []
+    },
   }),
   methods: {
     ...mapActions(['logout', 'showSnackbar', 'getGrades', 'getAttendances']),
@@ -188,6 +185,9 @@ export default {
       })
 
     this.getAttendances()
+      .then(() => {
+        this.table.items = this.attendances
+      })
   },
 }
 </script>

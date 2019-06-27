@@ -27,7 +27,7 @@
                 </v-card-text>
                 <v-card-actions>
                   <!-- <v-btn block flat color="pink" @click="$router.push({ name: 'registration' })">Register</v-btn> -->
-                  <v-btn block flat color="pink" type="submit">Login</v-btn>
+                  <v-btn :loading="loading" block flat color="pink" type="submit">Login</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -47,7 +47,7 @@ export default {
     SnackBar
   },
   computed: {
-    ...mapState(['snackbar'])
+    ...mapState(['snackbar', 'loading'])
   },
   data () {
     return {
