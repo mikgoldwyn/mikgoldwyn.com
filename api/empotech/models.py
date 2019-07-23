@@ -29,6 +29,7 @@ class Attendance(models.Model):
 class Grade(models.Model):
     TYPES = Choices(
         ('activity', 'Activity'),
+        ('exam', 'Exam'),
     )
 
     score = models.PositiveSmallIntegerField()
